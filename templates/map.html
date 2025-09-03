@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта України - AgroTracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #3498db;
+        }
+        
+        .main-content {
+            padding: 40px 20px;
+        }
+        
+        .intro-section {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .intro-section h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .intro-section p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">🌾 AgroTracker</a>
+            <nav class="nav-links">
+                <a href="/ads/ads">Всі оголошення</a>
+                <a href="/map">Карта регіонів</a>
+                <a href="/user/profile">Профіль</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="intro-section">
+            <h1>Карта регіонів України</h1>
+            <p>Оберіть регіон на карті, щоб знайти сільськогосподарські оголошення у вашому районі</p>
+        </div>
+
+        <div id="ukraine-map-container"></div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/ukraine-map.js') }}"></script>
+</body>
+</html>

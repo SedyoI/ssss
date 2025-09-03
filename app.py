@@ -33,6 +33,12 @@ def uploaded_file(filename):
     """Надати доступ до завантажених файлів."""
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+@app.route('/map')
+def ukraine_map():
+    """Сторінка з картою України."""
+    from flask import render_template
+    return render_template('map.html')
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

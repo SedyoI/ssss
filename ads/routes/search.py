@@ -11,15 +11,22 @@ def search_ads():
     try:
         # Отримання параметра пошуку
         query_param = request.args.get('query', '').lower().strip()
+        location = request.args.get('location', '').strip()
 
         # Якщо параметр пустий, повернути помилку
         if not query_param:
             return jsonify({"error": "Параметр 'query' не може бути порожнім."}), 400
 
         # Пошук за заголовком і описом (чутливість до регістру і часткове співпадіння)
-        ads = Ad.query.filter(
+        query = Ad.query.filter(
             (Ad.title.ilike(f"%{query_param}%")) | (Ad.description.ilike(f"%{query_param}%"))
-        ).all()
+        )
+        
+        # Додаємо фільтр за локацією, якщо вказано
+        if location:
+            query = query.filter(Ad.location.ilike(f"%{location}%"))
+            
+        ads = query.all()
 
         # Якщо оголошення не знайдено
         if not ads:
