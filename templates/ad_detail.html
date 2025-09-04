@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ad.title }} - AgroTracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comments-ratings.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">🌾 AgroTracker</a>
+                <nav class="nav-links">
+                    <a href="/ads/ads">Всі оголошення</a>
+                    <a href="/map">Карта регіонів</a>
+                    <a href="/user/profile">Профіль</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Ad Details -->
+            <div class="card">
+                <h1 class="ad-title">{{ ad.title }}</h1>
+                <div class="ad-price">{{ ad.price }} UAH</div>
+                <div class="ad-location">📍 {{ ad.location }}</div>
+                <div class="ad-description">{{ ad.description }}</div>
+                
+                {% if ad.images %}
+                <div class="ad-images">
+                    {% for image in ad.images %}
+                    <img src="{{ image.image_url }}" alt="Фото оголошення" class="ad-image">
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="ad-meta">
+                    <p><strong>Автор:</strong> {{ seller_email }}</p>
+                    <p><strong>Дата створення:</strong> {{ ad.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                </div>
+            </div>
+
+            <!-- Seller Rating Section -->
+            <div class="rating-section">
+                <div class="rating-header">
+                    <h2 class="rating-title">Рейтинг продавця</h2>
+                </div>
+                
+                <div id="rating-summary"></div>
+                
+                <!-- Rate Seller Form -->
+                <div class="rating-form">
+                    <h3>Оцініть продавця</h3>
+                    <div class="rating-input-group">
+                        <label class="rating-label">Ваша оцінка:</label>
+                        <div class="rating-stars-input" data-selected-rating="0">
+                            <span class="star" data-rating="1">☆</span>
+                            <span class="star" data-rating="2">☆</span>
+                            <span class="star" data-rating="3">☆</span>
+                            <span class="star" data-rating="4">☆</span>
+                            <span class="star" data-rating="5">☆</span>
+                        </div>
+                    </div>
+                    <div class="rating-input-group">
+                        <label class="rating-label" for="rating-comment">Коментар (необов'язково):</label>
+                        <textarea id="rating-comment" class="rating-comment-textarea" 
+                                  placeholder="Поділіться своїм досвідом співпраці з цим продавцем..."></textarea>
+                    </div>
+                    <div class="rating-form-actions">
+                        <button class="submit-rating-btn" data-ad-id="{{ ad.id }}">Оцінити</button>
+                    </div>
+                </div>
+
+                <!-- Ratings List -->
+                <div id="ratings-list"></div>
+                <div id="ratings-pagination"></div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section" id="comments-section">
+                <div class="comments-header">
+                    <h2 class="comments-title">Коментарі</h2>
+                    <button class="add-comment-btn" data-ad-id="{{ ad.id }}">Додати коментар</button>
+                </div>
+                
+                <div id="comments-list"></div>
+                <div id="comments-pagination"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/comments-ratings.js') }}"></script>
+    <script>
+        // Initialize with current ad and user data
+        document.addEventListener('DOMContentLoaded', function() {
+            commentsRatingsManager.setCurrentAdId({{ ad.id }});
+            
+            // Set auth token if user is logged in
+            const authToken = localStorage.getItem('authToken');
+            if (authToken) {
+                commentsRatingsManager.setAuthToken(authToken);
+            }
+            
+            // Load initial data
+            commentsRatingsManager.loadComments({{ ad.id }});
+            commentsRatingsManager.loadUserRatings('{{ ad.user_id }}');
+        });
+    </script>
+</body>
+</html>

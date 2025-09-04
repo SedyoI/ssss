@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 import requests
 from ads.utils import format_ad_response
 from ads.models import Ad
+from ads.models import UserRating
 #from User.models import User  # Модель User із зовнішнього сервісу
 
 profile_bp = Blueprint('profile', __name__)
@@ -33,11 +34,18 @@ def get_profile():
             for ad in ads
         ]
 
+        # Отримання статистики рейтингу користувача
+        average_rating = UserRating.get_user_average_rating(current_user_id)
+        ratings_count = UserRating.get_user_ratings_count(current_user_id)
         # Підготовка відповіді
         user_data = {
            # "user_id": current_user_id,
             #"email": user_email,
-            "ads": ads_data
+            "ads": ads_data,
+            "rating_info": {
+                "average_rating": average_rating,
+                "total_ratings": ratings_count
+            }
         }
         return jsonify(user_data), 200
 
